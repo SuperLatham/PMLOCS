@@ -41,13 +41,14 @@ card_cost_9_list = []
 card_cost_10_list = []
 
 for classID in range(9):
-    getUrl = 'https://shadowverse-portal.com/cards?clan%5B0%5D=' + str(classID) + '&format=3&card_set%5B0%5D=100' + no + '&lang=ja' #対象URL
-    html = requests.get(getUrl)
-    soup = BeautifulSoup(html.content, "html.parser")
-    for card_name in soup.find_all(class_ = "el-card-visual-name"):
-        card_name_list.append(card_name.text)
-    for card_link in soup.find_all(class_ = "el-card-visual-content"):
-        card_link_list.append(card_link.get("href"))
+    for realityID in range (1,5):
+        getUrl = "https://shadowverse-portal.com/cards?clan%5B0%5D=" + str(classID) + "&format=3&card_set%5B0%5D=100" + no + "&rarity[]=" + str(realityID) + "&lang=ja" #対象URL
+        html = requests.get(getUrl)
+        soup = BeautifulSoup(html.content, "html.parser")
+        for card_name in soup.find_all(class_ = "el-card-visual-name"):
+            card_name_list.append(card_name.text)
+        for card_link in soup.find_all(class_ = "el-card-visual-content"):
+            card_link_list.append(card_link.get("href"))
 
 
 for cost in range(11):
@@ -143,7 +144,7 @@ for i in card_link_list:
             for card_description_evo_br in card_description_evo.select("br"):
                 card_description_evo_br.replace_with("~~")
             card_description_evo_list.append(card_description_evo.text.replace("\r\n", ""))
-    elif i[11] == "3":
+    elif i[11] == "2" or i[11] == "3":
         card_kind_list.append("アミュレット")
         card_atk_list.append("")
         card_atk_evo_list.append("")
@@ -159,7 +160,16 @@ for i in card_link_list:
         card_life_evo_list.append("")
         card_skill_evo_list.append("")
         card_description_evo_list.append("")
-    
+    else:
+        card_kind_list.append("ERROR")
+        card_atk_list.append("")
+        card_atk_evo_list.append("")
+        card_life_list.append("")
+        card_life_evo_list.append("")
+        card_skill_evo_list.append("")
+        card_description_evo_list.append("")
+        print(cardUrl)
+
 df = pd.DataFrame({"link": card_link_list,
                    "kind": card_kind_list,
                    "type": card_type_list,
