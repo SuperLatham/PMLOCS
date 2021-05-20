@@ -144,7 +144,7 @@ for i in card_link_list:
             for card_description_evo_br in card_description_evo.select("br"):
                 card_description_evo_br.replace_with("~~")
             card_description_evo_list.append(card_description_evo.text.replace("\r\n", ""))
-    elif i[11] == "2" or i[11] == "3":
+    elif i[11] == "2" or i[11] == "3": #カウントダウンの無いアミュレットはここが2、あるアミュレットは3になるっぽい(要検証)
         card_kind_list.append("アミュレット")
         card_atk_list.append("")
         card_atk_evo_list.append("")
@@ -219,8 +219,9 @@ for card_name in card_name_list:
         template = amulet_template
     card_type = re.sub(type_pattern, r"''[[\1>タイプ:\1]]''", df.at[card_name, "type"])
     card_type = re.sub(type_royal_pattern, r"''[[\1>タイプ:指揮官/兵士]]''", card_type)
-    template_edited = template.replace("name", card_name).replace("no", no).replace("class", df.at[card_name, "class"]).replace("cost", df.at[card_name, "cost"]).replace("reality", df.at[card_name, "reality"]).replace("type", card_type).replace("pack", pack).replace("cv", df.at[card_name, "cv"]).replace("atk_evo", df.at[card_name, "atk_evo"]).replace("life_evo", df.at[card_name, "life_evo"]).replace("skill_evo", df.at[card_name, "skill_evo"]).replace("description_evo", df.at[card_name, "description_evo"]).replace("atk", df.at[card_name, "atk"]).replace("life", df.at[card_name, "life"]).replace("skill", df.at[card_name, "skill"]).replace("description", df.at[card_name, "description"])
-    template_edited = re.sub(keyword_pattern, r"''[[\1]]''", template_edited)
+    card_skill = re.sub(keyword_pattern,  r"''[[\1]]''", df.at[card_name, "skill"])
+    card_skill_evo = re.sub(keyword_pattern,  r"''[[\1]]''", df.at[card_name, "skill_evo"])
+    template_edited = template.replace("name", card_name).replace("no", no).replace("class", df.at[card_name, "class"]).replace("cost", df.at[card_name, "cost"]).replace("reality", df.at[card_name, "reality"]).replace("type", card_type).replace("pack", pack).replace("cv", df.at[card_name, "cv"]).replace("atk_evo", df.at[card_name, "atk_evo"]).replace("life_evo", df.at[card_name, "life_evo"]).replace("skill_evo", card_skill_evo).replace("description_evo", df.at[card_name, "description_evo"]).replace("atk", df.at[card_name, "atk"]).replace("life", df.at[card_name, "life"]).replace("skill", card_skill).replace("description", df.at[card_name, "description"])
     card_page = open("./{0}_{1}_{2}/{3}/{4}.txt".format(no, pack, today, df.at[card_name, "class"], card_name), "x")
     card_page.write(template_edited)
     card_page.close()
