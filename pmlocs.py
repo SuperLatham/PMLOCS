@@ -6,40 +6,10 @@ import datetime
 import os
 import re
 import PySimpleGUI as sg
+import time
+import subprocess
 
-ver = "3.0.0"
-
-card_name_list = []
-card_link_list = []
-card_type_list = []
-card_class_list = []
-card_rarity_list = []
-card_cv_list = []
-card_atk_list = []
-card_life_list = []
-card_skill_list = []
-card_description_list = []
-card_atk_evo_list = []
-card_life_evo_list = []
-card_skill_evo_list = []
-card_description_evo_list = []
-card_kind_list = []
-card_cost_list = []
-
-card_cost_0_list = []
-card_cost_1_list = []
-card_cost_2_list = []
-card_cost_3_list = []
-card_cost_4_list = []
-card_cost_5_list = []
-card_cost_6_list = []
-card_cost_7_list = []
-card_cost_8_list = []
-card_cost_9_list = []
-card_cost_10_list = []
-
-classID_list =[]
-realityID_list = []
+ver = "3.0.1"
 
 sg.theme("Dark Blue 3")
 
@@ -81,6 +51,37 @@ while True:
         break
 
     if event == "ページ生成":
+        card_name_list = []
+        card_link_list = []
+        card_type_list = []
+        card_class_list = []
+        card_rarity_list = []
+        card_cv_list = []
+        card_atk_list = []
+        card_life_list = []
+        card_skill_list = []
+        card_description_list = []
+        card_atk_evo_list = []
+        card_life_evo_list = []
+        card_skill_evo_list = []
+        card_description_evo_list = []
+        card_kind_list = []
+        card_cost_list = []
+
+        card_cost_0_list = []
+        card_cost_1_list = []
+        card_cost_2_list = []
+        card_cost_3_list = []
+        card_cost_4_list = []
+        card_cost_5_list = []
+        card_cost_6_list = []
+        card_cost_7_list = []
+        card_cost_8_list = []
+        card_cost_9_list = []
+        card_cost_10_list = []
+
+        classID_list =[]
+        realityID_list = []
         no = values[0]
         pack = values[1]
 
@@ -103,6 +104,7 @@ while True:
                     card_name_list.append(card_name.text)
                 for card_link in soup.find_all(class_ = "el-card-visual-content"):
                     card_link_list.append(card_link.get("href"))
+                time.sleep(1)
 
 
         for cost in range(11):
@@ -133,6 +135,7 @@ while True:
                         card_cost_9_list.append(search_name.text)
                     else:
                         card_cost_10_list.append(search_name.text)
+                    time.sleep(1)
 
         for i in card_name_list:
             if i in card_cost_0_list:
@@ -223,6 +226,7 @@ while True:
                 card_skill_evo_list.append("")
                 card_description_evo_list.append("")
                 print(cardUrl)
+            time.sleep(1)
 
         df = pd.DataFrame({"link": card_link_list,
                         "kind": card_kind_list,
@@ -247,9 +251,10 @@ while True:
         spell_template = open("spell.txt", "r", encoding = "UTF-8").read()
         amulet_template = open("amulet.txt", "r", encoding = "UTF-8").read()
         today = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")
+        file_dir_base = "{0}_{1}_{2}".format(no, pack, today)
         for i in classID_list:
             class_name = check_class_dic[str(i)]
-            os.makedirs("{0}_{1}_{2}/{3}".format(no, pack, today, class_name))
+            os.makedirs(file_dir_base + "/{0}".format(class_name))
 
         keyword_list = ["ファンファーレ", "ラストワード", "進化時", "攻撃時", "守護", "疾走", "潜伏", "必殺", "ドレイン", "覚醒", "復讐", "スペルブースト", "カウントダウン", "ネクロマンス", "土の秘術", "突進", "交戦時", "エンハンス", "リアニメイト", "葬送", "共鳴", "チョイス", "アクセラレート", "直接召喚", "結晶", "ユニオンンバースト", "渇望", "狂乱", "融合", "連携", "操縦", "奥義", "解放奥義", "公開"]
         keyword_pattern = r"(%s)" % "|".join(keyword_list)
@@ -270,9 +275,14 @@ while True:
             card_skill = re.sub(keyword_pattern,  r"''[[\1]]''", df.at[card_name, "skill"])
             card_skill_evo = re.sub(keyword_pattern,  r"''[[\1]]''", df.at[card_name, "skill_evo"])
             template_edited = template.replace("name", card_name).replace("no", no).replace("class", df.at[card_name, "class"]).replace("cost", df.at[card_name, "cost"]).replace("reality", df.at[card_name, "reality"]).replace("type", card_type).replace("pack", pack).replace("cv", df.at[card_name, "cv"]).replace("atk_evo", df.at[card_name, "atk_evo"]).replace("life_evo", df.at[card_name, "life_evo"]).replace("skill_evo", card_skill_evo).replace("description_evo", df.at[card_name, "description_evo"]).replace("atk", df.at[card_name, "atk"]).replace("life", df.at[card_name, "life"]).replace("skill", card_skill).replace("description", df.at[card_name, "description"])
-            card_page = open("./{0}_{1}_{2}/{3}/{4}.txt".format(no, pack, today, df.at[card_name, "class"], card_name), "x")
+            card_page = open("./" + file_dir_base + "/{0}/{1}.txt".format(df.at[card_name, "class"], card_name), "x")
             card_page.write(template_edited)
             card_page.close()
+
+        if os.name == "nt":
+             subprocess.run("start " + file_dir_base, shell = True)
+        elif os.name == "posix":
+            subprocess.run("open " + file_dir_base)
 
         sg.popup("『ターゲット撃破』「勝ち勝ちー！」")
 window.close()

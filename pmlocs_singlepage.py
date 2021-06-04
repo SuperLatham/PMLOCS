@@ -3,6 +3,9 @@ import datetime
 import os
 import re
 import PySimpleGUI as sg
+import subprocess
+
+ver = "3.0.1"
 
 sg.theme("Dark Blue 3")
 
@@ -35,7 +38,7 @@ layout = [
     [sg.Submit(button_text = "ページ生成")]
 ]
 
-window = sg.Window("PMLOCS", layout, resizable = True)
+window = sg.Window("PMLOCS Ver." + ver, layout, resizable = True)
 
 while True:
   event, values = window.read()
@@ -83,9 +86,15 @@ while True:
     card_skill = re.sub(keyword_pattern,  r"''[[\1]]''", card_skill)
     card_skill_evo = re.sub(keyword_pattern,  r"''[[\1]]''", card_skill_evo)
     template_edited = template.replace("name", card_name).replace("no", no).replace("class", card_class).replace("cost", card_cost).replace("reality", card_reality).replace("type", card_type).replace("pack", pack).replace("cv", card_cv).replace("atk_evo", card_atk_evo).replace("life_evo", card_life_evo).replace("skill_evo", card_skill_evo).replace("description_evo", card_description_evo).replace("atk", card_atk).replace("life", card_life).replace("skill", card_skill).replace("description", card_description)
-    card_page = open("./単一ページ/{0}/{1}.txt".format(today, card_name), "x")
+    file_dir = "./単一ページ/{0}/{1}.txt".format(today, card_name)
+    card_page = open(file_dir, "x")
     card_page.write(template_edited)
     card_page.close()
+
+    if os.name == "nt":
+      subprocess.run("start " + file_dir, shell = True)
+    elif os.name == "posix":
+      subprocess.run("open " + file_dir_abs)
 
   sg.popup("『ターゲット撃破』「勝ち勝ちー！」")
 window.close()
