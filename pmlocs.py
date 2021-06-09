@@ -9,7 +9,7 @@ import PySimpleGUI as sg
 import time
 import subprocess
 
-ver = "3.0.1"
+ver = "3.1.0"
 
 sg.theme("Dark Blue 3")
 
@@ -31,6 +31,15 @@ check_reality_dic = {
     "13": "ゴールド",
     "14": "レジェンド"
 }
+
+with open("keyword.txt", "r", encoding = "UTF-8") as keyword: #外部ファイルからキーワード能力を読み込みlistに変換
+  keyword_list = keyword.read().split(",")
+keyword_pattern = r"(%s)" % "|".join(keyword_list)
+with open("type.txt", "r", encoding = "UTF-8") as type: #外部ファイルからタイプを読み込みlistに変換
+  type_list = type.read().split(",")
+type_pattern = r"(%s)" % "|".join(type_list)
+type_royal_list = ["指揮官", "兵士"] #ロイヤルの兵士・指揮官のみwikiのページ名が特殊なので別処理
+type_royal_pattern = r"(%s)" % "|".join(type_royal_list)
 
 layout = [
     [sg.Text("パメラ犯す")],
@@ -256,12 +265,12 @@ while True:
             class_name = check_class_dic[str(i)]
             os.makedirs(file_dir_base + "/{0}".format(class_name))
 
-        keyword_list = ["ファンファーレ", "ラストワード", "進化時", "攻撃時", "守護", "疾走", "潜伏", "必殺", "ドレイン", "覚醒", "復讐", "スペルブースト", "カウントダウン", "ネクロマンス", "土の秘術", "突進", "交戦時", "エンハンス", "リアニメイト", "葬送", "共鳴", "チョイス", "アクセラレート", "直接召喚", "結晶", "ユニオンンバースト", "渇望", "狂乱", "融合", "連携", "操縦", "奥義", "解放奥義", "公開"]
-        keyword_pattern = r"(%s)" % "|".join(keyword_list)
-        type_list = ["レヴィオン", "財宝", "土の印", "マナリア", "アーティファクト",  "機械", "自然"]
-        type_pattern = r"(%s)" % "|".join(type_list)
-        type_royal_list = ["指揮官", "兵士"]
-        type_royal_pattern = r"(%s)" % "|".join(type_royal_list)
+        # keyword_list = ["ファンファーレ", "ラストワード", "進化時", "攻撃時", "守護", "疾走", "潜伏", "必殺", "ドレイン", "覚醒", "復讐", "スペルブースト", "カウントダウン", "ネクロマンス", "土の秘術", "突進", "交戦時", "エンハンス", "リアニメイト", "葬送", "共鳴", "チョイス", "アクセラレート", "直接召喚", "結晶", "ユニオンンバースト", "渇望", "狂乱", "融合", "連携", "操縦", "奥義", "解放奥義", "公開"]
+        # keyword_pattern = r"(%s)" % "|".join(keyword_list)
+        # type_list = ["レヴィオン", "財宝", "土の印", "マナリア", "アーティファクト",  "機械", "自然"]
+        # type_pattern = r"(%s)" % "|".join(type_list)
+        # type_royal_list = ["指揮官", "兵士"]
+        # type_royal_pattern = r"(%s)" % "|".join(type_royal_list)
 
         for card_name in card_name_list:
             if df.at[card_name, "kind"] == "フォロワー" :
@@ -271,7 +280,7 @@ while True:
             elif df.at[card_name, "kind"] == "アミュレット" :
                 template = amulet_template
             card_type = re.sub(type_pattern, r"''[[\1>タイプ:\1]]''", df.at[card_name, "type"])
-            card_type = re.sub(type_royal_pattern, r"''[[\1>タイプ:指揮官/兵士]]''", card_type)
+            card_type = re.sub(type_royal_pattern, r"''[[\1>タイプ:指揮官/兵士]]''", card_type) #ロイヤルの兵士・指揮官のみwikiのページ名が特殊なので別処理
             card_skill = re.sub(keyword_pattern,  r"''[[\1]]''", df.at[card_name, "skill"])
             card_skill_evo = re.sub(keyword_pattern,  r"''[[\1]]''", df.at[card_name, "skill_evo"])
             template_edited = template.replace("name", card_name).replace("no", no).replace("class", df.at[card_name, "class"]).replace("cost", df.at[card_name, "cost"]).replace("reality", df.at[card_name, "reality"]).replace("type", card_type).replace("pack", pack).replace("cv", df.at[card_name, "cv"]).replace("atk_evo", df.at[card_name, "atk_evo"]).replace("life_evo", df.at[card_name, "life_evo"]).replace("skill_evo", card_skill_evo).replace("description_evo", df.at[card_name, "description_evo"]).replace("atk", df.at[card_name, "atk"]).replace("life", df.at[card_name, "life"]).replace("skill", card_skill).replace("description", df.at[card_name, "description"])
