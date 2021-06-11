@@ -94,7 +94,7 @@ while True:
     card_type = re.sub(type_royal_pattern, r"''[[\1>タイプ:指揮官/兵士]]''", card_type) #ロイヤルの兵士・指揮官のみwikiのページ名が特殊なので別処理
     card_skill = re.sub(keyword_pattern,  r"''[[\1]]''", card_skill)
     card_skill_evo = re.sub(keyword_pattern,  r"''[[\1]]''", card_skill_evo)
-    template_edited = template.replace("name", card_name).replace("no", no).replace("class", card_class).replace("cost", card_cost).replace("reality", card_reality).replace("type", card_type).replace("pack", pack).replace("cv", card_cv).replace("atk_evo", card_atk_evo).replace("life_evo", card_life_evo).replace("skill_evo", card_skill_evo).replace("description_evo", card_description_evo).replace("atk", card_atk).replace("life", card_life).replace("skill", card_skill).replace("description", card_description)
+    template_edited = template.replace("name", card_name).replace("no", no).replace("class", card_class).replace("cost", card_cost).replace("reality", card_reality).replace("type", card_type).replace("pack", pack).replace("cv", card_cv).replace("atk_evo", card_atk_evo).replace("life_evo", card_life_evo).replace("skill_evo", card_skill_evo).replace("description_evo", card_description_evo).replace("atk", card_atk).replace("life", card_life).replace("skill", card_skill).replace("description", card_description).replace("illus", card_illus)
     file_dir = "./単一ページ/{0}/{1}.txt".format(today, card_name)
     card_page = open(file_dir, "x")
     card_page.write(template_edited)

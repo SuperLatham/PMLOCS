@@ -7,7 +7,7 @@
 |>|!center:タイプ|>|center:type|
 |>|!center:パック|>|center:[[pack>packのカード一覧]]|
 |>|!center:CV|>|center:cv|
-|>|!center:イラストレーター|>|center:|
+|>|!center:イラストレーター|>|center:illus|
 |>|>|>|!center:進化前|
 |center:攻撃力|center:atk|center:体力|center:life|
 |>|>|>|skill|
