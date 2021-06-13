@@ -1,4 +1,4 @@
-{|width=""340px""
+{|width="340px"
 |center:w(50%)|center:w(50%)|c
 |>|name|
 |!コスト:cost|アミュレット|

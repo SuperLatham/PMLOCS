@@ -1,4 +1,4 @@
-{|width=""340px""
+{|width="340px"
 |w(25%)|w(25%)|w(25%)|w(25%)|c
 |>|>|>|center:name|
 |>|!center:コスト:cost|>|center:フォロワー|

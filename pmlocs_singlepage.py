@@ -5,7 +5,7 @@ import re
 import PySimpleGUI as sg
 import subprocess
 
-ver = "3.1.0"
+ver = "3.1.2"
 
 sg.theme("Dark Blue 3")
 
@@ -26,23 +26,23 @@ layout_kind = [
 
 layout = [
     [sg.Text("パメラ犯す")],
-    [sg.Text("カードパックNo", size = (15, 1)), sg.InputText("20", size = (20, 1))],
-    [sg.Text("カードパック名", size = (15, 1)), sg.InputText("暗黒のウェルサ", size = (20, 1))],
-    [sg.Text("カード名", size = (15, 1)), sg.InputText("", size = (20, 1))],
-    [sg.Text("コスト", size = (15, 1)), sg.InputText("", size = (20, 1))],
-    [sg.Text("クラス", size = (15, 1)), sg.Combo(("エルフ", "ロイヤル", "ウィッチ", "ドラゴン", "ネクロマンサー", "ヴァンパイア", "ビショップ", "ネメシス", "ニュートラル"), size = (20, 1))],
-    [sg.Text("レアリティ", size = (15, 1)), sg.Combo(("ブロンズ", "シルバー", "ゴールド", "レジェンド"), size = (20, 1))],
-    [sg.Text("タイプ", size = (15, 1)),sg.Combo(("-", "兵士", "指揮官", "レヴィオン", "財宝", "土の印", "マナリア", "アーティファクト", "機械", "自然"), default_value = "-", size = (20, 1)), sg.Text("複数のタイプを持つカードは\n指揮官・レヴィオン\nのように・で区切って直接入力してください", size = (35, 3))],
-    [sg.Text("CV", size = (15, 1)), sg.InputText("", size = (20, 1))],
-    [sg.Text("イラストレーター", size = (15, 1)), sg.InputText("", size = (20, 1))],
-    [sg.Text("攻撃力(進化前)", size = (15, 1)), sg.InputText("", size = (20, 1))],
-    [sg.Text("体力(進化前)", size = (15, 1)), sg.InputText("", size = (20, 1))],
-    [sg.Text("攻撃力(進化後)", size = (15, 1)), sg.InputText("", size = (20, 1))],
-    [sg.Text("体力(進化後)", size = (15, 1)), sg.InputText("", size = (20, 1))],
-    [sg.Text("能力(進化前)", size = (15, 5)), sg.Multiline("")],
-    [sg.Text("能力(進化後)", size = (15, 5)), sg.Multiline("")],
-    [sg.Text("フレーバーテキスト(進化前)", size = (15, 5)), sg.Multiline("")],
-    [sg.Text("フレーバーテキスト(進化後)", size = (15, 5)), sg.Multiline("")],
+    [sg.Text("カードパックNo", size = (15, 1)), sg.InputText("21", size = (20, 1), key = "-PACK_NO-")],
+    [sg.Text("カードパック名", size = (15, 1)), sg.InputText("リナセント・クロニクル", size = (20, 1), key = "-PACK_NAME-")],
+    [sg.Text("カード名", size = (15, 1)), sg.InputText("", size = (20, 1), key = "-CARD_NAME-")],
+    [sg.Text("コスト", size = (15, 1)), sg.InputText("", size = (20, 1), key = "-COST-")],
+    [sg.Text("クラス", size = (15, 1)), sg.Combo(("エルフ", "ロイヤル", "ウィッチ", "ドラゴン", "ネクロマンサー", "ヴァンパイア", "ビショップ", "ネメシス", "ニュートラル"), size = (20, 1), key = "-CLASS-")],
+    [sg.Text("レアリティ", size = (15, 1)), sg.Combo(("ブロンズ", "シルバー", "ゴールド", "レジェンド"), size = (20, 1), key = "-REALITY-")],
+    [sg.Text("タイプ", size = (15, 1)),sg.Combo(("-", "兵士", "指揮官", "レヴィオン", "財宝", "土の印", "マナリア", "アーティファクト", "機械", "自然"), default_value = "-", size = (20, 1), key = "-TYPE1-"), sg.Combo(("-", "兵士", "指揮官", "レヴィオン", "財宝", "土の印", "マナリア", "アーティファクト", "機械", "自然"), default_value = "-", size = (20, 1), key = "-TYPE2-")],
+    [sg.Text("CV", size = (15, 1)), sg.InputText("", size = (20, 1), key = "-CV-")],
+    [sg.Text("イラストレーター", size = (15, 1)), sg.InputText("", size = (20, 1), key = "-ILLUS-")],
+    [sg.Text("攻撃力(進化前)", size = (15, 1)), sg.InputText("", size = (20, 1), key = "-ATK-")],
+    [sg.Text("体力(進化前)", size = (15, 1)), sg.InputText("", size = (20, 1), key = "-LIFE-")],
+    [sg.Text("攻撃力(進化後)", size = (15, 1)), sg.InputText("", size = (20, 1), key = "-ATK_EVO-")],
+    [sg.Text("体力(進化後)", size = (15, 1)), sg.InputText("", size = (20, 1), key = "-LIFE_EVO-")],
+    [sg.Text("能力(進化前)", size = (15, 5)), sg.Multiline("", key = "-SKILL-"),],
+    [sg.Text("能力(進化後)", size = (15, 5)), sg.Multiline("", key = "-SKILL_EVO-")],
+    [sg.Text("フレーバーテキスト(進化前)", size = (15, 5)), sg.Multiline("", key = "-DESCRIPTION-")],
+    [sg.Text("フレーバーテキスト(進化後)", size = (15, 5)), sg.Multiline("", key = "-DESCRIPTION_EVO-")],
     [sg.Frame("カードタイプ", layout_kind), sg.Text("スペル、アミュレットは攻撃力と体力、\n能力とフレーバーテキストの進化後は不要です", size = (40, 2))],
     [sg.Submit(button_text = "ページ生成")]
 ]
@@ -56,23 +56,24 @@ while True:
     break
 
   if event == "ページ生成":
-    no = values[0]
-    pack = values[1]
-    card_name = values[2]
-    card_cost = str(values[3])
-    card_class = values[4]
-    card_reality = values[5]
-    card_type = values[6]
-    card_cv = values[7]
-    card_illus = values[8]
-    card_atk = str(values[9])
-    card_life = str(values[10])
-    card_atk_evo = str(values[11])
-    card_life_evo = str(values[12])
-    card_skill = values[13].replace("\n", "~~")
-    card_skill_evo = values[14].replace("\n", "~~")
-    card_description = values[15].replace("\n", "~~")
-    card_description_evo = values[16].replace("\n", "~~")
+    no = values["-PACK_NO-"]
+    pack = values["-PACK_NAME-"]
+    card_name = values["-CARD_NAME-"]
+    card_cost = str(values["-COST-"])
+    card_class = values["-CLASS-"]
+    card_reality = values["-REALITY-"]
+    card_type1 = values["-TYPE1-"]
+    card_type2 = values["-TYPE2-"]
+    card_cv = values["-CV-"]
+    card_illus = values["-ILLUS-"]
+    card_atk = str(values["-ATK-"])
+    card_life = str(values["-LIFE-"])
+    card_atk_evo = str(values["-ATK_EVO-"])
+    card_life_evo = str(values["-LIFE_EVO-"])
+    card_skill = values["-SKILL-"].replace("\n", "~~")
+    card_skill_evo = values["-SKILL_EVO-"].replace("\n", "~~")
+    card_description = values["-DESCRIPTION-"].replace("\n", "~~")
+    card_description_evo = values["-DESCRIPTION_EVO-"].replace("\n", "~~")
 
     if values["-FOLLOWER-"]:
       template = open("follower.txt", "r", encoding = "UTF-8").read()
@@ -80,15 +81,13 @@ while True:
       template = open("spell.txt", "r", encoding = "UTF-8").read()
     elif values["-AMULET-"]:
       template = open("amulet.txt", "r", encoding = "UTF-8").read()
-    today = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")
+    today = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     os.makedirs("単一ページ/{0}".format(today))
 
-    # keyword_list = ["ファンファーレ", "ラストワード", "進化時", "攻撃時", "守護", "疾走", "潜伏", "必殺", "ドレイン", "覚醒", "復讐", "スペルブースト", "カウントダウン", "ネクロマンス", "土の秘術", "突進", "交戦時", "エンハンス", "リアニメイト", "葬送", "共鳴", "チョイス", "アクセラレート", "直接召喚", "結晶", "ユニオンンバースト", "渇望", "狂乱", "融合", "連携", "操縦", "奥義", "解放奥義", "公開"]
-    # keyword_pattern = r"(%s)" % "|".join(keyword_list)
-    # type_list = ["レヴィオン", "財宝", "土の印", "マナリア", "アーティファクト",  "機械", "自然"]
-    # type_pattern = r"(%s)" % "|".join(type_list)
-    # type_royal_list = ["指揮官", "兵士"]
-    # type_royal_pattern = r"(%s)" % "|".join(type_royal_list)
+    if card_type2 == "-":
+      card_type = card_type1
+    else:
+      card_type = card_type1 + "・" + card_type2
 
     card_type = re.sub(type_pattern, r"''[[\1>タイプ:\1]]''", card_type)
     card_type = re.sub(type_royal_pattern, r"''[[\1>タイプ:指揮官/兵士]]''", card_type) #ロイヤルの兵士・指揮官のみwikiのページ名が特殊なので別処理

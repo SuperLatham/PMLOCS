@@ -9,7 +9,7 @@ import PySimpleGUI as sg
 import time
 import subprocess
 
-ver = "3.1.0"
+ver = "3.1.2"
 
 sg.theme("Dark Blue 3")
 
@@ -264,13 +264,6 @@ while True:
         for i in classID_list:
             class_name = check_class_dic[str(i)]
             os.makedirs(file_dir_base + "/{0}".format(class_name))
-
-        # keyword_list = ["ファンファーレ", "ラストワード", "進化時", "攻撃時", "守護", "疾走", "潜伏", "必殺", "ドレイン", "覚醒", "復讐", "スペルブースト", "カウントダウン", "ネクロマンス", "土の秘術", "突進", "交戦時", "エンハンス", "リアニメイト", "葬送", "共鳴", "チョイス", "アクセラレート", "直接召喚", "結晶", "ユニオンンバースト", "渇望", "狂乱", "融合", "連携", "操縦", "奥義", "解放奥義", "公開"]
-        # keyword_pattern = r"(%s)" % "|".join(keyword_list)
-        # type_list = ["レヴィオン", "財宝", "土の印", "マナリア", "アーティファクト",  "機械", "自然"]
-        # type_pattern = r"(%s)" % "|".join(type_list)
-        # type_royal_list = ["指揮官", "兵士"]
-        # type_royal_pattern = r"(%s)" % "|".join(type_royal_list)
 
         for card_name in card_name_list:
             if df.at[card_name, "kind"] == "フォロワー" :
