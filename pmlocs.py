@@ -237,7 +237,8 @@ while True:
                 print(cardUrl)
             time.sleep(1)
 
-        df = pd.DataFrame({"link": card_link_list,
+        df = pd.DataFrame({"name": card_name_list,
+                        "link": card_link_list,
                         "kind": card_kind_list,
                         "type": card_type_list,
                         "class": card_class_list,
@@ -255,6 +256,9 @@ while True:
                         },
                         index = card_name_list)
         df = df.astype("str")
+        df = df.drop_duplicates("name")
+
+        card_name_list = list(set(card_name_list))
 
         follower_template = open("follower.txt", "r", encoding = "UTF-8").read()
         spell_template = open("spell.txt", "r", encoding = "UTF-8").read()
@@ -272,8 +276,8 @@ while True:
                 template = spell_template
             elif df.at[card_name, "kind"] == "アミュレット" :
                 template = amulet_template
-            card_type = re.sub(type_pattern, r"''[[\1>タイプ:\1]]''", df.at[card_name, "type"])
-            card_type = re.sub(type_royal_pattern, r"''[[\1>タイプ:指揮官/兵士]]''", card_type) #ロイヤルの兵士・指揮官のみwikiのページ名が特殊なので別処理
+            card_type = re.sub(type_pattern, r"[[\1>タイプ:\1]]", df.at[card_name, "type"])
+            card_type = re.sub(type_royal_pattern, r"[[\1>タイプ:指揮官/兵士]]", card_type) #ロイヤルの兵士・指揮官のみwikiのページ名が特殊なので別処理
             card_skill = re.sub(keyword_pattern,  r"''[[\1]]''", df.at[card_name, "skill"])
             card_skill_evo = re.sub(keyword_pattern,  r"''[[\1]]''", df.at[card_name, "skill_evo"])
             template_edited = template.replace("name", card_name).replace("no", no).replace("class", df.at[card_name, "class"]).replace("cost", df.at[card_name, "cost"]).replace("reality", df.at[card_name, "reality"]).replace("type", card_type).replace("pack", pack).replace("cv", df.at[card_name, "cv"]).replace("atk_evo", df.at[card_name, "atk_evo"]).replace("life_evo", df.at[card_name, "life_evo"]).replace("skill_evo", card_skill_evo).replace("description_evo", df.at[card_name, "description_evo"]).replace("atk", df.at[card_name, "atk"]).replace("life", df.at[card_name, "life"]).replace("skill", card_skill).replace("description", df.at[card_name, "description"]).replace("illus", "")
